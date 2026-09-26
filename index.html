@@ -223,10 +223,10 @@ const DATOS = {
   },
 
   // --- Sobre mí ---
-  bio: "Me apasionan la tecnología y el desarrollo de soluciones innovadoras. Combino <strong>inteligencia artificial</strong>, <strong>educación</strong> y <strong>diseño gráfico</strong> para crear proyectos con impacto, y busco oportunidades en operaciones, administración y gestión de proyectos.",
+  bio: "Transformo ideas en soluciones tecnológicas escalables. Combino <strong>inteligencia artificial</strong>, <strong>diseño estratégico</strong> y <strong>desarrollo</strong> para crear productos con impacto real. Con experiencia construyendo proyectos de innovación desde cero, busco aportar mi visión técnica y resolutiva en roles de operaciones o gestión de proyectos.",
   datosRapidos: [
-    { titulo: "Enfoque", valor: "IA y educación" },
-    { titulo: "Busco",   valor: "Operaciones y gestión de proyectos" },
+    { titulo: "Enfoque", valor: "Inclusión, Impacto, Innovación Digital e IA" },
+    { titulo: "Busco",   valor: "Operaciones, hackathones, eventos y gestión de proyectos" },
     { titulo: "Base",    valor: "Santa Cruz, Bolivia" },
     { titulo: "Estudio", valor: "UNICEN · UAGRM" }
   ],
@@ -245,12 +245,15 @@ const DATOS = {
 
   // --- Startups ---
   startups: [
-    { nombre: "JADAI", rol: "Founder", icono: "cerebro", color: "linear-gradient(135deg,#1d4ed8,#0f1b2d)",
-      descripcion: "Iniciativa y sociedad científica enfocada en inteligencia artificial, innovación e investigación.",
-      url: "https://www.linkedin.com/company/jadai-bo/" },
     { nombre: "AgroTrace", rol: "CEO", icono: "hoja", color: "linear-gradient(135deg,#15803d,#0f3d2e)",
-      descripcion: "Startup de tecnología para el sector agropecuario: trazabilidad e innovación en el agro.",
-      url: "https://www.linkedin.com/company/agrotrace-bo/" }
+      descripcion: "Plataforma de trazabilidad agrícola respaldada por Innova Up de CAINCO. Solución tecnológica para la verificación de cumplimiento de normativas (EUDR).",
+      url: "https://www.linkedin.com/company/agrotrace-bo/" },
+    { nombre: "EkoLearn", rol: "Founder", icono: "corazon", color: "linear-gradient(135deg,#7c3aed,#2e1065)",
+      descripcion: "Sistema de apoyo para la detección temprana de indicadores de bienestar emocional mediante inteligencia artificial y análisis de actividad digital.",
+      url: "" },
+    { nombre: "JADAI", rol: "Founder", icono: "cerebro", color: "linear-gradient(135deg,#1d4ed8,#0f1b2d)",
+      descripcion: "Comunidad abierta de profesionales y estudiantes que fomenta la colaboración en proyectos de investigación, participación en hackathons y el impulso de nuevas startups.",
+      url: "https://www.linkedin.com/company/jadai-bo/" }
   ],
 
   // --- Logros (puesto: 1, 3 o null para distinciones) ---
@@ -276,8 +279,8 @@ const DATOS = {
 
   // --- Habilidades ---
   habilidades: {
-    tecnicas: ["Python", "IA avanzada", "Gestión de herramientas de IA", "Diseño gráfico", "Diseño UX/UI", "Plataformas de innovación digital", "Moodle / Canvas"],
-    blandas:  ["Liderazgo", "Trabajo en equipo", "Comunicación efectiva", "Planificación", "Adaptabilidad", "Resolución de problemas", "Pensamiento analítico", "Creatividad"]
+    tecnicas: ["Python", "IA avanzada", "Gestión de herramientas de IA", "Diseño gráfico", "Diseño UX/UI", "Plataformas de innovación digital", "Canvas"],
+    blandas:  ["Liderazgo estratégico", "Colaboración multidisciplinaria", "Pitching y oratoria técnica", "Gestión ágil de proyectos", "Adaptabilidad en entornos rápidos", "Resolución tecnológica", "Estrategia basada en datos", "Innovación de producto"]
   },
 
   // --- Idiomas (nivel en %) ---
@@ -322,6 +325,7 @@ const DATOS = {
     luna: '<path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9z"/>',
     nfc: '<path d="M6 8.3a6 6 0 0 1 0 7.4M9.5 5.5a10 10 0 0 1 0 13M13 3a14 14 0 0 1 0 18"/>',
     cerebro: '<path d="M12 5a3 3 0 1 0-5.997.125 4 4 0 0 0-2.526 5.77 4 4 0 0 0 .556 6.588A4 4 0 1 0 12 18Z"/><path d="M12 5a3 3 0 1 1 5.997.125 4 4 0 0 1 2.526 5.77 4 4 0 0 1-.556 6.588A4 4 0 1 1 12 18Z"/><path d="M12 5v13"/>',
+    corazon: '<path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/>',
     hoja: '<path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.5 19 2c1 2 2 4.2 2 8 0 5.5-4.8 10-10 10Z"/><path d="M2 21c0-3 1.9-5.4 5.2-6"/>'
   };
   const I = n => '<svg viewBox="0 0 24 24" aria-hidden="true">' + (P[n] || "") + "</svg>";
@@ -370,7 +374,7 @@ const DATOS = {
           <div class="rol">${esc(s.rol)}</div>
           <h3>${esc(s.nombre)}</h3>
           <p>${esc(s.descripcion)}</p>
-          <a href="${esc(s.url)}" target="_blank" rel="noopener">${I("linkedin")} Ver en LinkedIn</a>
+          ${s.url ? `<a href="${esc(s.url)}" target="_blank" rel="noopener">${I("linkedin")} Ver en LinkedIn</a>` : ""}
         </article>`).join("")}</div>` },
     { id: "logros", titulo: "Logros", icono: "trofeo", html: `
       <div class="contadores">
@@ -393,11 +397,11 @@ const DATOS = {
         <details><summary><span class="num">${i + 1}</span>${esc(p.titulo)}<span class="flecha">${I("flecha")}</span></summary><p>${esc(p.detalle)}</p></details>`).join("")}</div>` },
     { id: "habilidades", titulo: "Habilidades", icono: "rayo", html: `
       <div class="tabs" role="tablist" aria-label="Tipo de habilidad">
-        <button class="tab" role="tab" id="tab-t" aria-selected="true" aria-controls="panel-t">Técnicas</button>
-        <button class="tab" role="tab" id="tab-b" aria-selected="false" aria-controls="panel-b" tabindex="-1">Blandas</button>
+        <button class="tab" role="tab" id="tab-b" aria-selected="true" aria-controls="panel-b">Blandas</button>
+        <button class="tab" role="tab" id="tab-t" aria-selected="false" aria-controls="panel-t" tabindex="-1">Técnicas</button>
       </div>
-      <div class="chips anim-chips" role="tabpanel" id="panel-t" aria-labelledby="tab-t">${DATOS.habilidades.tecnicas.map((h, i) => `<span style="--i:${i}">${I("check")}${esc(h)}</span>`).join("")}</div>
-      <div class="chips anim-chips" role="tabpanel" id="panel-b" aria-labelledby="tab-b" hidden>${DATOS.habilidades.blandas.map((h, i) => `<span style="--i:${i}">${I("check")}${esc(h)}</span>`).join("")}</div>` },
+      <div class="chips anim-chips" role="tabpanel" id="panel-t" aria-labelledby="tab-t" hidden>${DATOS.habilidades.tecnicas.map((h, i) => `<span style="--i:${i}">${I("check")}${esc(h)}</span>`).join("")}</div>
+      <div class="chips anim-chips" role="tabpanel" id="panel-b" aria-labelledby="tab-b">${DATOS.habilidades.blandas.map((h, i) => `<span style="--i:${i}">${I("check")}${esc(h)}</span>`).join("")}</div>` },
     { id: "idiomas", titulo: "Idiomas", icono: "globo", html: `
       <div class="idiomas">${DATOS.idiomas.map(d => `
         <div class="idioma"><div class="anillo" data-p="${d.porcentaje}" role="img" aria-label="${esc(d.idioma)}: ${esc(d.nivel)}"><b>${d.porcentaje}%</b></div><h3>${esc(d.idioma)}</h3><span>${esc(d.nivel)}</span></div>`).join("")}</div>` },
