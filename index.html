@@ -478,14 +478,19 @@ const DATOS = {
 
   const btnG = $("#guardar");
   btnG.removeAttribute("download");
-  // Guardar contacto: descarga directa de contacto.vcf (iPhone lo abre en Contactos; Android lo descarga, tocar «Abrir»)
+  // Guardar contacto:
+  //  - iPhone: abre contacto.vcf y Safari muestra la tarjeta con «Crear contacto nuevo».
+  //  - Android (Chrome): intenta abrir «Nuevo contacto» con los datos ya puestos;
+  //    si el teléfono no lo permite, descarga contacto.vcf como respaldo.
   btnG.href = urlVcf;
   btnG.addEventListener("click", ev => {
-    const enApp = /; wv\)|FBAN|FBAV|Instagram|WhatsApp|Line\//i.test(ua);
-    if (esAndroid && enApp && urlBase) {
-      ev.preventDefault();
-      location.href = "intent://" + urlVcf.replace(/^https?:\/\//, "") + "#Intent;scheme=https;package=com.android.chrome;S.browser_fallback_url=" + encodeURIComponent(urlVcf) + ";end";
-    }
+    if (!esAndroid || !urlBase) return;
+    ev.preventDefault();
+    const x = v => encodeURIComponent(v);
+    location.href = "intent:#Intent;action=android.intent.action.INSERT;type=vnd.android.cursor.dir/raw_contact" +
+      ";S.name=" + x(nombreCompleto) + ";S.phone=" + x(C.telefono.replace(/\s+/g, "")) + ";i.phone_type=2" +
+      ";S.email=" + x(C.email) + ";i.email_type=2" + ";S.company=" + x(C.empresaVCard) + ";S.job_title=" + x(C.cargoVCard) +
+      ";S.notes=" + x(enlace) + ";S.browser_fallback_url=" + x(urlVcf) + ";end";
   });
 
   $("#compartir").addEventListener("click", () => {
