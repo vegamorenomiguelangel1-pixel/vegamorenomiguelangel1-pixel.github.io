@@ -167,6 +167,17 @@ p{font-size:15.5px}
 footer{text-align:center;font-size:13px;color:var(--muted);margin-top:22px}
 
 /* Toast */
+.hoja-fondo{position:fixed;inset:0;background:rgba(5,10,20,.55);z-index:60;display:flex;align-items:flex-end;justify-content:center;opacity:0;pointer-events:none;transition:opacity .2s}
+.hoja-fondo.ver{opacity:1;pointer-events:auto}
+.hoja{width:100%;max-width:480px;background:#fff;color:#0f1b2d;border-radius:22px 22px 0 0;padding:18px 18px 26px;transform:translateY(100%);transition:transform .25s}
+.hoja-fondo.ver .hoja{transform:translateY(0)}
+.hoja h3{font-size:18px;margin:0 0 4px;text-align:center}
+.hoja .nota{font-size:13.5px;color:#475569;text-align:center;margin:0 0 14px}
+.hoja .op{display:flex;align-items:center;gap:12px;width:100%;min-height:52px;padding:12px 14px;margin:8px 0 0;border:1px solid #e2e8f0;border-radius:14px;background:#f8fafc;color:#0f1b2d;font:600 15.5px/1.2 inherit;font-family:inherit;text-decoration:none;cursor:pointer;text-align:left}
+.hoja .op.primaria{background:#1d4ed8;color:#fff;border-color:#1d4ed8}
+.hoja .op small{display:block;font-weight:500;font-size:12.5px;opacity:.75;margin-top:2px}
+.hoja .qr{display:block;width:220px;height:220px;margin:6px auto 0}
+.hoja .cerrar{display:block;margin:14px auto 0;background:none;border:0;color:#475569;font:600 15px inherit;font-family:inherit;padding:10px 20px;cursor:pointer}
 .toast{position:fixed;left:50%;bottom:24px;transform:translate(-50%,120px);background:#0f1b2d;color:#fff;padding:12px 18px;border-radius:12px;font-size:14.5px;font-weight:600;box-shadow:0 10px 30px rgba(0,0,0,.3);transition:transform .3s;z-index:50}
 .toast.ver{transform:translate(-50%,0)}
 
@@ -189,6 +200,7 @@ footer{text-align:center;font-size:13px;color:var(--muted);margin-top:22px}
 <noscript><p style="padding:20px;text-align:center">Miguel Angel Vega Moreno · <a href="mailto:vegamorenomiguelangel1@gmail.com">vegamorenomiguelangel1@gmail.com</a> · <a href="https://wa.me/59176468251">WhatsApp +591 76468251</a> · <a href="contacto.vcf">Guardar contacto</a></p></noscript>
 <header class="hero" id="inicio"></header>
 <main class="wrap" id="app"></main>
+<div class="hoja-fondo" id="hojaFondo" aria-hidden="true"><div class="hoja" role="dialog" aria-modal="true" aria-labelledby="hojaTit"><h3 id="hojaTit"></h3><p class="nota" id="hojaNota"></p><div id="hojaCuerpo"></div><button class="cerrar" type="button" id="hojaCerrar">Cerrar</button></div></div>
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
 <script>
@@ -442,41 +454,55 @@ const DATOS = {
     const plegar = s => { if (s.length <= 75) return s; const p = [s.slice(0, 75)]; for (let i = 75; i < s.length; i += 74) p.push(" " + s.slice(i, i + 74)); return p.join("\r\n"); };
     return l.map(plegar).join("\r\n") + "\r\n";
   }
-  /* ---- Guardar contacto ----
-     Usa el archivo contacto.vcf publicado (con foto). Así funciona en Android
-     (se abre con Contactos) y en iPhone (muestra "Crear contacto nuevo").
-     En navegadores dentro de apps (WhatsApp, Instagram, Facebook) de Android
-     se abre en Chrome, porque esos navegadores no permiten descargar archivos. */
+  /* ---- Ventanas de Guardar contacto y Compartir (funcionan en Android y iPhone) ---- */
   const ua = navigator.userAgent;
   const esAndroid = /Android/i.test(ua);
-  const enApp = /; wv\)|FBAN|FBAV|Instagram|WhatsApp|Line\/|TikTok|Snapchat/i.test(ua);
+  const esIOS = /iPhone|iPad|iPod/i.test(ua) || (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
   const urlBase = location.protocol.startsWith("http") ? location.origin + location.pathname.replace(/[^/]*$/, "") : "";
-  const btnG = $("#guardar");
-  btnG.removeAttribute("download");
-  btnG.addEventListener("click", ev => {
-    if (esAndroid && enApp && urlBase) {
-      ev.preventDefault();
-      const sinEsquema = (urlBase + "contacto.vcf").replace(/^https?:\/\//, "");
-      location.href = "intent://" + sinEsquema + "#Intent;scheme=https;package=com.android.chrome;S.browser_fallback_url=" + encodeURIComponent(urlBase + "contacto.vcf") + ";end";
-      return;
-    }
-    aviso(esAndroid ? "Descargando… toca «Abrir» para guardarlo" : "Abriendo contacto…");
-  });
-
-  /* ---- Compartir (menú del teléfono; si no existe, WhatsApp o copiar enlace) ---- */
   const enlace = urlBase || location.href;
+  const urlVcf = (urlBase || "") + "contacto.vcf";
+  const fondo = $("#hojaFondo");
+  function abrirHoja(titulo, nota, html) {
+    $("#hojaTit").textContent = titulo; $("#hojaNota").textContent = nota; $("#hojaCuerpo").innerHTML = html;
+    fondo.classList.add("ver"); fondo.setAttribute("aria-hidden", "false");
+  }
+  function cerrarHoja() { fondo.classList.remove("ver"); fondo.setAttribute("aria-hidden", "true"); }
+  $("#hojaCerrar").addEventListener("click", cerrarHoja);
+  fondo.addEventListener("click", e => { if (e.target === fondo) cerrarHoja(); });
   async function copiar(txt) {
     try { await navigator.clipboard.writeText(txt); return true; } catch (e) {}
     const ta = document.createElement("textarea"); ta.value = txt; ta.setAttribute("readonly", ""); ta.style.position = "fixed"; ta.style.opacity = "0";
-    document.body.appendChild(ta); ta.select(); let ok = false; try { ok = document.execCommand("copy"); } catch (_) {} ta.remove(); return ok;
+    document.body.appendChild(ta); ta.select(); ta.setSelectionRange(0, txt.length); let ok = false; try { ok = document.execCommand("copy"); } catch (_) {} ta.remove(); return ok;
   }
-  $("#compartir").addEventListener("click", async () => {
-    if (navigator.share) {
-      try { await navigator.share({ title: nombreCompleto, url: enlace }); return; }
-      catch (e) { if (e.name === "AbortError") return; }
-    }
-    if (await copiar(enlace)) { aviso("Enlace copiado ✓"); return; }
-    location.href = "https://wa.me/?text=" + encodeURIComponent(nombreCompleto + " · " + enlace);
+  const op = (acc, titulo, sub, extra = "") => `<button class="op ${extra}" type="button" data-acc="${acc}"><span>${titulo}${sub ? `<small>${sub}</small>` : ""}</span></button>`;
+
+  const btnG = $("#guardar");
+  btnG.removeAttribute("download");
+  btnG.addEventListener("click", ev => {
+    ev.preventDefault();
+    const nota = esIOS ? "Se abrirá tu tarjeta: toca «Crear contacto nuevo»." :
+                 esAndroid ? "Se descargará tu tarjeta: toca «Abrir» y elige Contactos para guardarla." :
+                 "Se descargará tu tarjeta de contacto.";
+    abrirHoja("Guardar contacto", nota,
+      `<a class="op primaria" href="${esc(urlVcf)}"><span>Descargar contacto<small>Nombre, foto, teléfono, correo y LinkedIn</small></span></a>` +
+      op("tel", "Copiar teléfono", C.telefono) + op("mail", "Copiar correo", C.email));
+  });
+
+  $("#compartir").addEventListener("click", () => {
+    abrirHoja("Compartir mi página", enlace,
+      op("wa", "Enviar por WhatsApp", "", "primaria") + op("copiar", "Copiar enlace") + op("qr", "Mostrar código QR", "Para que lo escaneen con la cámara") +
+      (navigator.share ? op("sistema", "Más opciones…", "Menú de compartir del teléfono") : ""));
+  });
+
+  $("#hojaCuerpo").addEventListener("click", async e => {
+    const b = e.target.closest("[data-acc]"); if (!b) return;
+    const acc = b.dataset.acc;
+    if (acc === "tel")  { aviso(await copiar(C.telefono) ? "Teléfono copiado ✓" : C.telefono); }
+    if (acc === "mail") { aviso(await copiar(C.email) ? "Correo copiado ✓" : C.email); }
+    if (acc === "copiar") { aviso(await copiar(enlace) ? "Enlace copiado ✓" : enlace); }
+    if (acc === "wa") { window.open("https://wa.me/?text=" + encodeURIComponent(nombreCompleto + " — " + C.cargoVCard + "\n" + enlace), "_blank", "noopener"); }
+    if (acc === "qr") { $("#hojaCuerpo").innerHTML = `<img class="qr" src="qr-pagina.svg" alt="Código QR de mi página" width="220" height="220">`; $("#hojaNota").textContent = "Escanéalo con la cámara del celular"; }
+    if (acc === "sistema") { try { await navigator.share({ title: nombreCompleto, text: nombreCompleto + " — " + C.cargoVCard, url: enlace }); } catch (err) {} }
   });
 
   /* ---- Tema claro / oscuro (recuerda la elección) ---- */
