@@ -442,34 +442,41 @@ const DATOS = {
     const plegar = s => { if (s.length <= 75) return s; const p = [s.slice(0, 75)]; for (let i = 75; i < s.length; i += 74) p.push(" " + s.slice(i, i + 74)); return p.join("\r\n"); };
     return l.map(plegar).join("\r\n") + "\r\n";
   }
-  let fotoB64 = null;
+  /* ---- Guardar contacto ----
+     Usa el archivo contacto.vcf publicado (con foto). Así funciona en Android
+     (se abre con Contactos) y en iPhone (muestra "Crear contacto nuevo").
+     En navegadores dentro de apps (WhatsApp, Instagram, Facebook) de Android
+     se abre en Chrome, porque esos navegadores no permiten descargar archivos. */
+  const ua = navigator.userAgent;
+  const esAndroid = /Android/i.test(ua);
+  const enApp = /; wv\)|FBAN|FBAV|Instagram|WhatsApp|Line\/|TikTok|Snapchat/i.test(ua);
+  const urlBase = location.protocol.startsWith("http") ? location.origin + location.pathname.replace(/[^/]*$/, "") : "";
   const btnG = $("#guardar");
-  function actualizarVcf() {
-    try {
-      const url = URL.createObjectURL(new Blob([vcard(fotoB64)], { type: "text/vcard;charset=utf-8" }));
-      if (btnG.dataset.url) URL.revokeObjectURL(btnG.dataset.url);
-      btnG.dataset.url = url; btnG.href = url;
-    } catch (e) { /* se queda contacto.vcf estático */ }
-  }
-  actualizarVcf();
-  // Añade la foto a la vCard en segundo plano (si no se puede, se descarga sin foto)
-  if (location.protocol.startsWith("http")) {
-    fetch(DATOS.foto).then(r => r.ok ? r.blob() : Promise.reject()).then(b => new Promise(res => {
-      const fr = new FileReader(); fr.onload = () => res(String(fr.result).split(",")[1]); fr.readAsDataURL(b);
-    })).then(b64 => { fotoB64 = b64; actualizarVcf(); }).catch(() => {});
-  }
-  btnG.addEventListener("click", () => aviso("Descargando contacto…"));
-
-  /* ---- Compartir (Web Share API con respaldo copiar enlace) ---- */
-  $("#compartir").addEventListener("click", async () => {
-    const datos = { title: nombreCompleto, text: nombreCompleto + " · " + C.cargoVCard, url: location.href };
-    if (navigator.share) { try { await navigator.share(datos); return; } catch (e) { if (e.name === "AbortError") return; } }
-    try { await navigator.clipboard.writeText(location.href); aviso("Enlace copiado ✓"); }
-    catch (e) {
-      const ta = document.createElement("textarea"); ta.value = location.href; ta.setAttribute("readonly", ""); ta.style.position = "fixed"; ta.style.opacity = "0";
-      document.body.appendChild(ta); ta.select(); let ok = false; try { ok = document.execCommand("copy"); } catch (_) {} ta.remove();
-      aviso(ok ? "Enlace copiado ✓" : location.href);
+  btnG.removeAttribute("download");
+  btnG.addEventListener("click", ev => {
+    if (esAndroid && enApp && urlBase) {
+      ev.preventDefault();
+      const sinEsquema = (urlBase + "contacto.vcf").replace(/^https?:\/\//, "");
+      location.href = "intent://" + sinEsquema + "#Intent;scheme=https;package=com.android.chrome;S.browser_fallback_url=" + encodeURIComponent(urlBase + "contacto.vcf") + ";end";
+      return;
     }
+    aviso(esAndroid ? "Descargando… toca «Abrir» para guardarlo" : "Abriendo contacto…");
+  });
+
+  /* ---- Compartir (menú del teléfono; si no existe, WhatsApp o copiar enlace) ---- */
+  const enlace = urlBase || location.href;
+  async function copiar(txt) {
+    try { await navigator.clipboard.writeText(txt); return true; } catch (e) {}
+    const ta = document.createElement("textarea"); ta.value = txt; ta.setAttribute("readonly", ""); ta.style.position = "fixed"; ta.style.opacity = "0";
+    document.body.appendChild(ta); ta.select(); let ok = false; try { ok = document.execCommand("copy"); } catch (_) {} ta.remove(); return ok;
+  }
+  $("#compartir").addEventListener("click", async () => {
+    if (navigator.share) {
+      try { await navigator.share({ title: nombreCompleto, url: enlace }); return; }
+      catch (e) { if (e.name === "AbortError") return; }
+    }
+    if (await copiar(enlace)) { aviso("Enlace copiado ✓"); return; }
+    location.href = "https://wa.me/?text=" + encodeURIComponent(nombreCompleto + " · " + enlace);
   });
 
   /* ---- Tema claro / oscuro (recuerda la elección) ---- */
