@@ -6,6 +6,7 @@
 <title>Miguel Angel Vega Moreno · Founder de JADAI · CEO de AgroTrace</title>
 <meta name="description" content="Founder de JADAI y CEO de AgroTrace. Estudiante de Innovación Digital e Inteligencia Artificial (UNICEN) y Ciencias de la Educación (UAGRM). Santa Cruz, Bolivia.">
 <meta name="theme-color" content="#0f1b2d">
+<meta name="nfc-i18n" content="es,en-v1">
 <meta property="og:title" content="Miguel Angel Vega Moreno">
 <meta property="og:description" content="Founder de JADAI · CEO de AgroTrace">
 <meta property="og:image" content="foto.jpg">
@@ -37,6 +38,11 @@ svg{width:1em;height:1em;fill:none;stroke:currentColor;stroke-width:2;stroke-lin
 .hero::before{content:"";position:absolute;inset:-40% -30% auto auto;width:320px;height:320px;background:radial-gradient(circle,rgba(59,130,246,.35),transparent 65%);pointer-events:none}
 .topbar{display:flex;justify-content:space-between;align-items:center;position:relative}
 .chip-nfc{font-size:12px;letter-spacing:.08em;text-transform:uppercase;background:rgba(255,255,255,.12);padding:6px 11px;border-radius:999px;display:inline-flex;gap:6px;align-items:center}
+.top-der{display:flex;align-items:center;gap:8px}
+.lang{display:inline-flex;align-items:center;height:36px;padding:3px;border-radius:999px;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.18)}
+.lang button{min-width:38px;height:28px;padding:0 10px;border-radius:999px;font-size:12.5px;font-weight:700;letter-spacing:.06em;color:rgba(255,255,255,.72);transition:background .2s,color .2s}
+.lang button[aria-pressed="true"]{background:#fff;color:#0f1b2d;box-shadow:0 2px 8px rgba(0,0,0,.25)}
+.lang button:active{transform:scale(.94)}
 .tema{width:44px;height:44px;border-radius:50%;background:rgba(255,255,255,.12);display:grid;place-items:center;font-size:20px}
 .tema:active{transform:scale(.92)}
 .avatar{position:relative;width:132px;height:132px;margin:8px auto 14px}
@@ -197,7 +203,7 @@ footer{text-align:center;font-size:13px;color:var(--muted);margin-top:22px}
 </style>
 </head>
 <body>
-<noscript><p style="padding:20px;text-align:center">Miguel Angel Vega Moreno · <a href="mailto:vegamorenomiguelangel1@gmail.com">vegamorenomiguelangel1@gmail.com</a> · <a href="https://wa.me/59176468251">WhatsApp +591 76468251</a> · <a href="contacto.vcf">Guardar contacto</a></p></noscript>
+<noscript><p style="padding:20px;text-align:center">Miguel Angel Vega Moreno · <a href="mailto:vegamorenomiguelangel1@gmail.com">vegamorenomiguelangel1@gmail.com</a> · <a href="https://wa.me/59176468251">WhatsApp +591 76468251</a> · <a href="contacto.vcf">Guardar contacto / Save contact</a></p></noscript>
 <header class="hero" id="inicio"></header>
 <main class="wrap" id="app"></main>
 <div class="hoja-fondo" id="hojaFondo" aria-hidden="true"><div class="hoja" role="dialog" aria-modal="true" aria-labelledby="hojaTit"><h3 id="hojaTit"></h3><p class="nota" id="hojaNota"></p><div id="hojaCuerpo"></div><button class="cerrar" type="button" id="hojaCerrar">Cerrar</button></div></div>
@@ -205,98 +211,245 @@ footer{text-align:center;font-size:13px;color:var(--muted);margin-top:22px}
 
 <script>
 /* =====================================================================
-   DATOS EDITABLES
+   DATOS EDITABLES · EDITABLE CONTENT  (página bilingüe ES / EN)
    ---------------------------------------------------------------------
-   Todo el contenido de la página está aquí. Para actualizar la tarjeta,
-   cambia solo los textos de este objeto y guarda el archivo.
+   Todo el contenido de la página está aquí, en 3 bloques:
+     • DATOS.comun → lo que NO cambia con el idioma (nombre, foto,
+                     teléfono, correo, enlaces).
+     • DATOS.es    → todos los textos en ESPAÑOL.
+     • DATOS.en    → los MISMOS textos en INGLÉS.
+   CÓMO EDITAR:
+     1) Si cambias un texto en DATOS.es, cambia también su equivalente
+        en DATOS.en (misma posición, mismo orden en las listas).
+     2) Si agregas/quitas un elemento de una lista (logros, proyectos,
+        habilidades…), hazlo en AMBOS idiomas para que coincidan.
+     3) Los campos que no son texto (url, color, icono, puesto,
+        porcentaje, actual) deben ser iguales en ambos idiomas.
+   Idioma por defecto: español; si el teléfono no está en español se
+   muestra en inglés. Se recuerda la elección del botón ES | EN, y el
+   enlace ?lang=en o ?lang=es fuerza un idioma.
    (Si cambias nombre/teléfono/correo, actualiza también contacto.vcf,
     que es solo un respaldo para navegadores sin JavaScript.)
    ===================================================================== */
 const DATOS = {
-  // --- Identidad ---
-  nombre: "Miguel Angel",
-  apellidos: "Vega Moreno",
-  foto: "foto.jpg",
-  roles: [
-    { texto: "Founder de JADAI",  url: "https://www.linkedin.com/company/jadai-bo/" },
-    { texto: "CEO de AgroTrace",  url: "https://www.linkedin.com/company/agrotrace-bo/" }
-  ],
-  subtitulo: "Innovación Digital e IA · Ciencias de la Educación",
-  ubicacion: "Santa Cruz, Bolivia",
-
-  // --- Contacto (botones rápidos, vCard y sección Contacto) ---
-  contacto: {
-    email: "vegamorenomiguelangel1@gmail.com",
-    telefono: "+591 76468251",
-    whatsapp: "https://wa.me/59176468251",
-    linkedin: "https://www.linkedin.com/in/miguel-angel-vega-moreno-1715a5277",
-    cargoVCard: "Founder de JADAI · CEO de AgroTrace",
-    empresaVCard: "JADAI · AgroTrace"
+  /* ------------------ COMÚN (igual en ambos idiomas) ------------------ */
+  comun: {
+    nombre: "Miguel Angel",
+    apellidos: "Vega Moreno",
+    foto: "foto.jpg",
+    contacto: {
+      email: "vegamorenomiguelangel1@gmail.com",
+      telefono: "+591 76468251",
+      whatsapp: "https://wa.me/59176468251",
+      linkedin: "https://www.linkedin.com/in/miguel-angel-vega-moreno-1715a5277",
+      cargoVCard: "Founder de JADAI · CEO de AgroTrace",   // usado por «Guardar contacto» (Android)
+      empresaVCard: "JADAI · AgroTrace"
+    }
   },
 
-  // --- Sobre mí ---
-  bio: "Transformo ideas en soluciones tecnológicas escalables. Combino <strong>inteligencia artificial</strong>, <strong>diseño estratégico</strong> y <strong>desarrollo</strong> para crear productos con impacto real. Con experiencia construyendo proyectos de innovación desde cero, busco aportar mi visión técnica y resolutiva en roles de operaciones o gestión de proyectos.",
-  datosRapidos: [
-    { titulo: "Enfoque", valor: "Inclusión, Impacto, Innovación Digital e IA" },
-    { titulo: "Busco",   valor: "Operaciones, hackathones, eventos y gestión de proyectos" },
-    { titulo: "Base",    valor: "Santa Cruz, Bolivia" },
-    { titulo: "Estudio", valor: "UNICEN · UAGRM" }
-  ],
+  /* =============================== ESPAÑOL =============================== */
+  es: {
+    tituloPagina: "Miguel Angel Vega Moreno · Founder de JADAI · CEO de AgroTrace",
+    descripcionPagina: "Founder de JADAI y CEO de AgroTrace. Estudiante de Innovación Digital e Inteligencia Artificial (UNICEN) y Ciencias de la Educación (UAGRM). Santa Cruz, Bolivia.",
+    cargo: "Founder de JADAI · CEO de AgroTrace",   // texto del mensaje al compartir
+    roles: [
+      { texto: "Founder de JADAI",  url: "https://www.linkedin.com/company/jadai-bo/" },
+      { texto: "CEO de AgroTrace",  url: "https://www.linkedin.com/company/agrotrace-bo/" }
+    ],
+    subtitulo: "Innovación Digital e IA · Ciencias de la Educación",
+    ubicacion: "Santa Cruz, Bolivia",
 
-  // --- Estudios (de más reciente a más antiguo) ---
-  estudios: [
-    { titulo: "Lic. Innovación Digital e Inteligencia Artificial", institucion: "Universidad Central (UNICEN)", periodo: "Actualmente", actual: true,
-      detalle: "Mi carrera principal: inteligencia artificial, transformación digital y desarrollo de soluciones tecnológicas." },
-    { titulo: "Lic. Ciencias de la Educación", institucion: "Universidad Autónoma Gabriel René Moreno (UAGRM)", periodo: "Actualmente", actual: true,
-      detalle: "Formación en pedagogía y procesos de aprendizaje, que conecto con la tecnología educativa." },
-    { titulo: "Perito en Diseño Gráfico y Publicidad", institucion: "Instituto Técnico Domingo Sabio", periodo: "2021 – 2022",
-      detalle: "Diseño gráfico, comunicación visual y publicidad." },
-    { titulo: "Bachiller", institucion: "Unidad Educativa Pedro Diez II", periodo: "2018 – 2024",
-      detalle: "Egresado con Mérito de Bachiller." }
-  ],
+    // --- Sobre mí ---
+    bio: "Transformo ideas en soluciones tecnológicas escalables. Combino <strong>inteligencia artificial</strong>, <strong>diseño estratégico</strong> y <strong>desarrollo</strong> para crear productos con impacto real. Con experiencia construyendo proyectos de innovación desde cero, busco aportar mi visión técnica y resolutiva en roles de operaciones o gestión de proyectos.",
+    datosRapidos: [
+      { titulo: "Enfoque", valor: "Inclusión, Impacto, Innovación Digital e IA" },
+      { titulo: "Busco",   valor: "Operaciones, hackathones, eventos y gestión de proyectos" },
+      { titulo: "Base",    valor: "Santa Cruz, Bolivia" },
+      { titulo: "Estudio", valor: "UNICEN · UAGRM" }
+    ],
 
-  // --- Startups ---
-  startups: [
-    { nombre: "AgroTrace", rol: "CEO", icono: "hoja", color: "linear-gradient(135deg,#15803d,#0f3d2e)",
-      descripcion: "Plataforma de trazabilidad agrícola respaldada por Innova Up de CAINCO. Solución tecnológica para la verificación de cumplimiento de normativas (EUDR).",
-      url: "https://www.linkedin.com/company/agrotrace-bo/" },
-    { nombre: "JADAI", rol: "Founder", icono: "cerebro", color: "linear-gradient(135deg,#1d4ed8,#0f1b2d)",
-      descripcion: "Comunidad abierta de profesionales y estudiantes que fomenta la colaboración en proyectos de investigación, participación en hackathons y el impulso de nuevas startups.",
-      url: "https://www.linkedin.com/company/jadai-bo/" }
-  ],
+    // --- Estudios (de más reciente a más antiguo) ---
+    estudios: [
+      { titulo: "Lic. Innovación Digital e Inteligencia Artificial", institucion: "Universidad Central (UNICEN)", periodo: "Actualmente", actual: true,
+        detalle: "Mi carrera principal: inteligencia artificial, transformación digital y desarrollo de soluciones tecnológicas." },
+      { titulo: "Lic. Ciencias de la Educación", institucion: "Universidad Autónoma Gabriel René Moreno (UAGRM)", periodo: "Actualmente", actual: true,
+        detalle: "Formación en pedagogía y procesos de aprendizaje, que conecto con la tecnología educativa." },
+      { titulo: "Perito en Diseño Gráfico y Publicidad", institucion: "Instituto Técnico Domingo Sabio", periodo: "2021 – 2022",
+        detalle: "Diseño gráfico, comunicación visual y publicidad." },
+      { titulo: "Bachiller", institucion: "Unidad Educativa Pedro Diez II", periodo: "2018 – 2024",
+        detalle: "Egresado con Mérito de Bachiller." }
+    ],
 
-  // --- Logros (puesto: 1, 3 o null para distinciones) ---
-  logros: [
-    { texto: "Mayor impacto empresarial",          puesto: 1 },
-    { texto: "Venado",                             puesto: 1 },
-    { texto: "IA Safety Bolivia",                  puesto: 1 },
-    { texto: "Track de agentes en la Buildathon",  puesto: 1 },
-    { texto: "Café Cursor",                        puesto: 3 },
-    { texto: "Diploma de honor",                   puesto: null },
-    { texto: "Mérito de Bachiller",                puesto: null },
-    { texto: "Diseño y Publicidad",                puesto: null }
-  ],
+    // --- Startups ---
+    startups: [
+      { nombre: "AgroTrace", rol: "CEO", icono: "hoja", color: "linear-gradient(135deg,#15803d,#0f3d2e)",
+        descripcion: "Plataforma de trazabilidad agrícola respaldada por Innova Up de CAINCO. Solución tecnológica para la verificación de cumplimiento de normativas (EUDR).",
+        url: "https://www.linkedin.com/company/agrotrace-bo/" },
+      { nombre: "JADAI", rol: "Founder", icono: "cerebro", color: "linear-gradient(135deg,#1d4ed8,#0f1b2d)",
+        descripcion: "Comunidad abierta de profesionales y estudiantes que fomenta la colaboración en proyectos de investigación, participación en hackathons y el impulso de nuevas startups.",
+        url: "https://www.linkedin.com/company/jadai-bo/" }
+    ],
 
-  // --- Proyectos ---
-  proyectos: [
-    { titulo: "EkoLearn (Founder)",                   detalle: "Sistema de apoyo para la detección temprana de indicadores de bienestar emocional mediante inteligencia artificial y análisis de actividad digital." },
-    { titulo: "Proyecto de Vinculación Universitaria", detalle: "Conexión entre la universidad y la comunidad a través de proyectos aplicados." },
-    { titulo: "Comunidad JADAI",                       detalle: "Espacio abierto donde profesionales y estudiantes colaboran en investigación, hackathons y nuevas startups con IA." },
-    { titulo: "Investigación académica departamental", detalle: "Impacto en el desarrollo de la investigación académica a nivel departamental." },
-    { titulo: "Talleres de innovación",                detalle: "Diseño y facilitación de talleres prácticos de innovación, inteligencia artificial y metodologías ágiles, donde estudiantes y profesionales aprenden a transformar ideas en prototipos y soluciones reales." }
-  ],
+    // --- Logros (puesto: 1, 3 o null para distinciones) ---
+    logros: [
+      { texto: "Mayor impacto empresarial",          puesto: 1 },
+      { texto: "Venado",                             puesto: 1 },
+      { texto: "IA Safety Bolivia",                  puesto: 1 },
+      { texto: "Track de agentes en la Buildathon",  puesto: 1 },
+      { texto: "Café Cursor",                        puesto: 3 },
+      { texto: "Diploma de honor",                   puesto: null },
+      { texto: "Mérito de Bachiller",                puesto: null },
+      { texto: "Diseño y Publicidad",                puesto: null }
+    ],
 
-  // --- Habilidades ---
-  habilidades: {
-    tecnicas: ["Python", "IA avanzada", "Gestión de herramientas de IA", "Diseño gráfico", "Diseño UX/UI", "Plataformas de innovación digital", "Canvas"],
-    blandas:  ["Liderazgo estratégico", "Colaboración multidisciplinaria", "Pitching y oratoria técnica", "Gestión ágil de proyectos", "Adaptabilidad en entornos rápidos", "Resolución tecnológica", "Estrategia basada en datos", "Innovación de producto"]
+    // --- Proyectos ---
+    proyectos: [
+      { titulo: "EkoLearn (Founder)",                    detalle: "Sistema de apoyo para la detección temprana de indicadores de bienestar emocional mediante inteligencia artificial y análisis de actividad digital." },
+      { titulo: "Proyecto de Vinculación Universitaria", detalle: "Conexión entre la universidad y la comunidad a través de proyectos aplicados." },
+      { titulo: "Comunidad JADAI",                       detalle: "Espacio abierto donde profesionales y estudiantes colaboran en investigación, hackathons y nuevas startups con IA." },
+      { titulo: "Investigación académica departamental", detalle: "Impacto en el desarrollo de la investigación académica a nivel departamental." },
+      { titulo: "Talleres de innovación",                detalle: "Diseño y facilitación de talleres prácticos de innovación, inteligencia artificial y metodologías ágiles, donde estudiantes y profesionales aprenden a transformar ideas en prototipos y soluciones reales." }
+    ],
+
+    // --- Habilidades ---
+    habilidades: {
+      tecnicas: ["Python", "IA avanzada", "Gestión de herramientas de IA", "Diseño gráfico", "Diseño UX/UI", "Plataformas de innovación digital", "Canvas"],
+      blandas:  ["Liderazgo estratégico", "Colaboración multidisciplinaria", "Pitching y oratoria técnica", "Gestión ágil de proyectos", "Adaptabilidad en entornos rápidos", "Resolución tecnológica", "Estrategia basada en datos", "Innovación de producto"]
+    },
+
+    // --- Idiomas (nivel en %) ---
+    idiomas: [
+      { idioma: "Español", nivel: "Nativo", porcentaje: 100 },
+      { idioma: "Inglés",  nivel: "Básico", porcentaje: 25 }
+    ],
+
+    // --- Textos de la interfaz (botones, títulos, avisos) ---
+    ui: {
+      tarjeta: "Tarjeta digital",
+      temaOscuro: "Cambiar a modo oscuro", temaClaro: "Cambiar a modo claro",
+      idiomaGrupo: "Idioma", fotoDe: "Foto de",
+      guardar: "Guardar contacto", correo: "Correo", compartir: "Compartir",
+      navSecciones: "Secciones",
+      secSobreMi: "Sobre mí", secEstudios: "Estudios", secStartups: "Startups", secLogros: "Logros",
+      secProyectos: "Proyectos", secHabilidades: "Habilidades", secIdiomas: "Idiomas", secContacto: "Contacto",
+      tocaEtapa: "Toca cada etapa para ver más.", detalles: "Detalles",
+      verLinkedIn: "Ver en LinkedIn",
+      primeros: "Primeros lugares", podios: "Podios en competencias", reconocimientos: "Reconocimientos",
+      filtrarLogros: "Filtrar logros", todos: "Todos", fPodios: "Podios", fDistinciones: "Distinciones",
+      lugar1: "1er lugar", lugar3: "3er lugar", lugarN: n => n + "º lugar", distincion: "Distinción",
+      tipoHabilidad: "Tipo de habilidad", blandas: "Blandas", tecnicas: "Técnicas",
+      ubicacion: "Ubicación",
+      cerrar: "Cerrar",
+      hojaTitulo: "Compartir mi página",
+      enviarWA: "Enviar por WhatsApp", copiarEnlace: "Copiar enlace",
+      mostrarQR: "Mostrar código QR", mostrarQRSub: "Para que lo escaneen con la cámara",
+      masOpciones: "Más opciones…", masOpcionesSub: "Menú de compartir del teléfono",
+      qrAlt: "Código QR de mi página", qrNota: "Escanéalo con la cámara del celular",
+      telCopiado: "Teléfono copiado ✓", correoCopiado: "Correo copiado ✓", enlaceCopiado: "Enlace copiado ✓"
+    }
   },
 
-  // --- Idiomas (nivel en %) ---
-  idiomas: [
-    { idioma: "Español", nivel: "Nativo", porcentaje: 100 },
-    { idioma: "Inglés",  nivel: "Básico", porcentaje: 25 }
-  ]
+  /* =============================== ENGLISH =============================== */
+  en: {
+    tituloPagina: "Miguel Angel Vega Moreno · Founder of JADAI · CEO of AgroTrace",
+    descripcionPagina: "Founder of JADAI and CEO of AgroTrace. Studying Digital Innovation & Artificial Intelligence (UNICEN) and Education Sciences (UAGRM). Santa Cruz, Bolivia.",
+    cargo: "Founder of JADAI · CEO of AgroTrace",
+    roles: [
+      { texto: "Founder of JADAI",  url: "https://www.linkedin.com/company/jadai-bo/" },
+      { texto: "CEO of AgroTrace",  url: "https://www.linkedin.com/company/agrotrace-bo/" }
+    ],
+    subtitulo: "Digital Innovation & AI · Education Sciences",
+    ubicacion: "Santa Cruz, Bolivia",
+
+    // --- About me ---
+    bio: "I turn ideas into scalable tech solutions. I combine <strong>artificial intelligence</strong>, <strong>strategic design</strong> and <strong>development</strong> to build products with real impact. With hands-on experience building innovation projects from the ground up, I'm looking to bring my technical, solution-oriented mindset to operations or project management roles.",
+    datosRapidos: [
+      { titulo: "Focus",       valor: "Inclusion, impact, digital innovation & AI" },
+      { titulo: "Looking for", valor: "Operations, hackathons, events & project management" },
+      { titulo: "Based in",    valor: "Santa Cruz, Bolivia" },
+      { titulo: "Studying at", valor: "UNICEN · UAGRM" }
+    ],
+
+    // --- Education (most recent first) ---
+    estudios: [
+      { titulo: "B.Sc. in Digital Innovation & Artificial Intelligence", institucion: "Universidad Central (UNICEN)", periodo: "Current", actual: true,
+        detalle: "My main degree: artificial intelligence, digital transformation and building tech solutions." },
+      { titulo: "B.A. in Education Sciences", institucion: "Universidad Autónoma Gabriel René Moreno (UAGRM)", periodo: "Current", actual: true,
+        detalle: "Training in pedagogy and learning processes, which I connect with educational technology." },
+      { titulo: "Technical Diploma in Graphic Design & Advertising", institucion: "Instituto Técnico Domingo Sabio", periodo: "2021 – 2022",
+        detalle: "Graphic design, visual communication and advertising." },
+      { titulo: "High School Diploma", institucion: "Unidad Educativa Pedro Diez II", periodo: "2018 – 2024",
+        detalle: "Graduated with the High School Merit Award." }
+    ],
+
+    // --- Startups ---
+    startups: [
+      { nombre: "AgroTrace", rol: "CEO", icono: "hoja", color: "linear-gradient(135deg,#15803d,#0f3d2e)",
+        descripcion: "Agricultural traceability platform backed by CAINCO's Innova Up. A tech solution for verifying regulatory compliance (EUDR).",
+        url: "https://www.linkedin.com/company/agrotrace-bo/" },
+      { nombre: "JADAI", rol: "Founder", icono: "cerebro", color: "linear-gradient(135deg,#1d4ed8,#0f1b2d)",
+        descripcion: "An open community of professionals and students that drives collaboration on research projects, hackathon participation and the launch of new startups.",
+        url: "https://www.linkedin.com/company/jadai-bo/" }
+    ],
+
+    // --- Achievements (puesto: 1, 3 or null for honors) ---
+    logros: [
+      { texto: "Greatest Business Impact",           puesto: 1 },
+      { texto: "Venado",                             puesto: 1 },
+      { texto: "IA Safety Bolivia",                  puesto: 1 },
+      { texto: "Agents Track at the Buildathon",     puesto: 1 },
+      { texto: "Café Cursor",                        puesto: 3 },
+      { texto: "Diploma of Honor",                   puesto: null },
+      { texto: "High School Merit Award",            puesto: null },
+      { texto: "Design & Advertising",               puesto: null }
+    ],
+
+    // --- Projects ---
+    proyectos: [
+      { titulo: "EkoLearn (Founder)",                detalle: "A support system for the early detection of emotional well-being indicators using artificial intelligence and digital activity analysis." },
+      { titulo: "University Outreach Project",       detalle: "Connecting the university with the community through applied projects." },
+      { titulo: "JADAI Community",                   detalle: "An open space where professionals and students collaborate on research, hackathons and new AI startups." },
+      { titulo: "Departmental Academic Research",    detalle: "Contributing to the growth of academic research at the departmental level." },
+      { titulo: "Innovation Workshops",              detalle: "Designing and facilitating hands-on workshops on innovation, artificial intelligence and agile methodologies, where students and professionals learn to turn ideas into prototypes and real-world solutions." }
+    ],
+
+    // --- Skills ---
+    habilidades: {
+      tecnicas: ["Python", "Advanced AI", "AI tool management", "Graphic design", "UX/UI design", "Digital innovation platforms", "Canvas"],
+      blandas:  ["Strategic leadership", "Cross-functional collaboration", "Pitching & technical public speaking", "Agile project management", "Adaptability in fast-paced environments", "Tech-driven problem solving", "Data-driven strategy", "Product innovation"]
+    },
+
+    // --- Languages (level in %) ---
+    idiomas: [
+      { idioma: "Spanish", nivel: "Native", porcentaje: 100 },
+      { idioma: "English", nivel: "Basic",  porcentaje: 25 }
+    ],
+
+    // --- Interface texts (buttons, titles, messages) ---
+    ui: {
+      tarjeta: "Digital card",
+      temaOscuro: "Switch to dark mode", temaClaro: "Switch to light mode",
+      idiomaGrupo: "Language", fotoDe: "Photo of",
+      guardar: "Save contact", correo: "Email", compartir: "Share",
+      navSecciones: "Sections",
+      secSobreMi: "About me", secEstudios: "Education", secStartups: "Startups", secLogros: "Achievements",
+      secProyectos: "Projects", secHabilidades: "Skills", secIdiomas: "Languages", secContacto: "Contact",
+      tocaEtapa: "Tap each item to see more.", detalles: "Details",
+      verLinkedIn: "View on LinkedIn",
+      primeros: "First places", podios: "Competition podiums", reconocimientos: "Awards",
+      filtrarLogros: "Filter achievements", todos: "All", fPodios: "Podiums", fDistinciones: "Honors",
+      lugar1: "1st place", lugar3: "3rd place", lugarN: n => n + "th place", distincion: "Honor",
+      tipoHabilidad: "Skill type", blandas: "Soft", tecnicas: "Technical",
+      ubicacion: "Location",
+      cerrar: "Close",
+      hojaTitulo: "Share my page",
+      enviarWA: "Send via WhatsApp", copiarEnlace: "Copy link",
+      mostrarQR: "Show QR code", mostrarQRSub: "So others can scan it with their camera",
+      masOpciones: "More options…", masOpcionesSub: "Your phone's share menu",
+      qrAlt: "QR code for my page", qrNota: "Scan it with your phone's camera",
+      telCopiado: "Phone number copied ✓", correoCopiado: "Email copied ✓", enlaceCopiado: "Link copied ✓"
+    }
+  }
 };
 /* ======================= FIN DE DATOS EDITABLES ======================= */
 
@@ -306,8 +459,23 @@ const DATOS = {
   const $$ = (s, c = document) => [...c.querySelectorAll(s)];
   const esc = s => String(s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
   const reducido = matchMedia("(prefers-reduced-motion: reduce)").matches;
-  const nombreCompleto = DATOS.nombre + " " + DATOS.apellidos;
-  const C = DATOS.contacto;
+  const K = DATOS.comun;
+  const nombreCompleto = K.nombre + " " + K.apellidos;
+  const C = K.contacto;
+  const root = document.documentElement;
+
+  /* ---- Idioma: ?lang= en la URL > elección guardada > idioma del teléfono ---- */
+  const IDIOMAS = ["es", "en"];
+  function idiomaInicial() {
+    let p = null; try { p = (new URLSearchParams(location.search).get("lang") || "").toLowerCase().slice(0, 2); } catch (e) {}
+    if (IDIOMAS.includes(p)) return p;
+    let g = null; try { g = localStorage.getItem("idioma"); } catch (e) {}
+    if (IDIOMAS.includes(g)) return g;
+    const nav = (navigator.language || (navigator.languages || [])[0] || "es").toLowerCase();
+    return nav.startsWith("es") ? "es" : "en";
+  }
+  let lang = idiomaInicial();
+  let D = DATOS[lang], T = D.ui;
 
   /* ---- Iconos SVG (trazo) ---- */
   const P = {
@@ -339,95 +507,6 @@ const DATOS = {
   };
   const I = n => '<svg viewBox="0 0 24 24" aria-hidden="true">' + (P[n] || "") + "</svg>";
 
-  /* ---- HERO ---- */
-  $("#inicio").innerHTML = `
-    <div class="topbar">
-      <span class="chip-nfc">${I("nfc")} Tarjeta digital</span>
-      <button class="tema" id="tema" aria-label="Cambiar a modo oscuro">${I("luna")}</button>
-    </div>
-    <div class="avatar"><span class="ring"></span><span class="foto"><img src="${esc(DATOS.foto)}" alt="Foto de ${esc(nombreCompleto)}" width="132" height="132" fetchpriority="high"></span></div>
-    <h1>${esc(DATOS.nombre)} <span>${esc(DATOS.apellidos)}</span></h1>
-    <div class="roles">${DATOS.roles.map(r => `<a href="${esc(r.url)}" target="_blank" rel="noopener">${esc(r.texto)}</a>`).join("")}</div>
-    <div class="sub">${esc(DATOS.subtitulo)}</div>
-    <div class="loc">${I("pin")} ${esc(DATOS.ubicacion)}</div>
-    <div class="acciones">
-      <a class="btn-guardar" id="guardar" href="contacto.vcf" download="${esc(nombreCompleto.replace(/\s+/g, "-"))}.vcf">${I("guardar")} Guardar contacto</a>
-      <a class="accion" href="${esc(C.whatsapp)}" target="_blank" rel="noopener">${I("whatsapp")}WhatsApp</a>
-      <a class="accion" href="mailto:${esc(C.email)}">${I("correo")}Correo</a>
-      <a class="accion" href="${esc(C.linkedin)}" target="_blank" rel="noopener">${I("linkedin")}LinkedIn</a>
-      <button class="accion" id="compartir" type="button">${I("compartir")}Compartir</button>
-    </div>`;
-
-  /* ---- Contenido ---- */
-  const unos = DATOS.logros.filter(l => l.puesto === 1).length;
-  const podios = DATOS.logros.filter(l => l.puesto).length;
-  const secciones = [
-    { id: "sobre-mi", titulo: "Sobre mí", icono: "usuario", html: `
-      <p class="bio">${DATOS.bio}</p>
-      <div class="datos-rapidos">${DATOS.datosRapidos.map(d => `<div class="dato"><b>${esc(d.titulo)}</b><span>${esc(d.valor)}</span></div>`).join("")}</div>` },
-    { id: "estudios", titulo: "Estudios", icono: "birrete", html: `
-      <p class="muted" style="font-size:14px;margin-bottom:12px">Toca cada etapa para ver más.</p>
-      <ol class="timeline">${DATOS.estudios.map((e, i) => `
-        <li class="${e.actual ? "actual" : ""}">
-          <button class="t-item" type="button" aria-expanded="${i === 0}" aria-controls="est-${i}">
-            <span class="t-top"><h3>${esc(e.titulo)}</h3><span class="badge ${e.actual ? "hoy" : ""}">${esc(e.periodo)}</span></span>
-            <span class="inst" style="display:block">${esc(e.institucion)}</span>
-            <span class="t-extra" id="est-${i}"><div>${esc(e.detalle)}</div></span>
-            <span class="mas">${I("flecha")} <span>Detalles</span></span>
-          </button>
-        </li>`).join("")}</ol>` },
-    { id: "startups", titulo: "Startups", icono: "cohete", html: `
-      <div class="startups">${DATOS.startups.map(s => `
-        <article class="startup" style="background:${s.color}">
-          <span class="logo">${I(s.icono)}</span>
-          <div class="rol">${esc(s.rol)}</div>
-          <h3>${esc(s.nombre)}</h3>
-          <p>${esc(s.descripcion)}</p>
-          ${s.url ? `<a href="${esc(s.url)}" target="_blank" rel="noopener">${I("linkedin")} Ver en LinkedIn</a>` : ""}
-        </article>`).join("")}</div>` },
-    { id: "logros", titulo: "Logros", icono: "trofeo", html: `
-      <div class="contadores">
-        <div class="contador"><div class="n" data-meta="${unos}">0</div><div class="l">Primeros lugares</div></div>
-        <div class="contador"><div class="n" data-meta="${podios}">0</div><div class="l">Podios en competencias</div></div>
-        <div class="contador"><div class="n" data-meta="${DATOS.logros.length}">0</div><div class="l">Reconocimientos</div></div>
-      </div>
-      <div class="filtros" role="group" aria-label="Filtrar logros">
-        <button class="filtro" type="button" data-f="todos" aria-pressed="true">Todos</button>
-        <button class="filtro" type="button" data-f="podio" aria-pressed="false">Podios</button>
-        <button class="filtro" type="button" data-f="distincion" aria-pressed="false">Distinciones</button>
-      </div>
-      <ul class="logros">${DATOS.logros.map(l => `
-        <li data-tipo="${l.puesto ? "podio" : "distincion"}">
-          <span class="medalla ${l.puesto === 1 ? "m1" : l.puesto === 3 ? "m3" : "mx"}">${I(l.puesto === 1 ? "trofeo" : l.puesto ? "medalla" : "estrella")}</span>
-          <span>${l.puesto ? `<small>${l.puesto === 1 ? "1er" : l.puesto === 3 ? "3er" : l.puesto + "º"} lugar</small>` : `<small>Distinción</small>`}${esc(l.texto)}</span>
-        </li>`).join("")}</ul>` },
-    { id: "proyectos", titulo: "Proyectos", icono: "carpeta", html: `
-      <div class="acordeon">${DATOS.proyectos.map((p, i) => `
-        <details><summary><span class="num">${i + 1}</span>${esc(p.titulo)}<span class="flecha">${I("flecha")}</span></summary><p>${esc(p.detalle)}</p></details>`).join("")}</div>` },
-    { id: "habilidades", titulo: "Habilidades", icono: "rayo", html: `
-      <div class="tabs" role="tablist" aria-label="Tipo de habilidad">
-        <button class="tab" role="tab" id="tab-b" aria-selected="true" aria-controls="panel-b">Blandas</button>
-        <button class="tab" role="tab" id="tab-t" aria-selected="false" aria-controls="panel-t" tabindex="-1">Técnicas</button>
-      </div>
-      <div class="chips anim-chips" role="tabpanel" id="panel-t" aria-labelledby="tab-t" hidden>${DATOS.habilidades.tecnicas.map((h, i) => `<span style="--i:${i}">${I("check")}${esc(h)}</span>`).join("")}</div>
-      <div class="chips anim-chips" role="tabpanel" id="panel-b" aria-labelledby="tab-b">${DATOS.habilidades.blandas.map((h, i) => `<span style="--i:${i}">${I("check")}${esc(h)}</span>`).join("")}</div>` },
-    { id: "idiomas", titulo: "Idiomas", icono: "globo", html: `
-      <div class="idiomas">${DATOS.idiomas.map(d => `
-        <div class="idioma"><div class="anillo" data-p="${d.porcentaje}" role="img" aria-label="${esc(d.idioma)}: ${esc(d.nivel)}"><b>${d.porcentaje}%</b></div><h3>${esc(d.idioma)}</h3><span>${esc(d.nivel)}</span></div>`).join("")}</div>` },
-    { id: "contacto", titulo: "Contacto", icono: "telefono", html: `
-      <div class="contacto">
-        <a href="${esc(C.whatsapp)}" target="_blank" rel="noopener"><span class="ic">${I("whatsapp")}</span><span><small>WhatsApp</small>${esc(C.telefono)}</span></a>
-        <a href="mailto:${esc(C.email)}"><span class="ic">${I("correo")}</span><span><small>Correo</small>${esc(C.email).replace("@", "<wbr>@")}</span></a>
-        <a href="${esc(C.linkedin)}" target="_blank" rel="noopener"><span class="ic">${I("linkedin")}</span><span><small>LinkedIn</small>Miguel Angel Vega Moreno</span></a>
-        <div><span class="ic">${I("pin")}</span><span><small>Ubicación</small>${esc(DATOS.ubicacion)}</span></div>
-      </div>` }
-  ];
-
-  $("#app").innerHTML = `
-    <nav class="nav" aria-label="Secciones"><ul>${secciones.filter(s => s.id !== "contacto").map(s => `<li><a href="#${s.id}">${esc(s.titulo)}</a></li>`).join("")}<li><a href="#contacto">Contacto</a></li></ul></nav>
-    ${secciones.map(s => `<section id="${s.id}" class="revelar" aria-labelledby="h-${s.id}"><h2 id="h-${s.id}"><span class="ic">${I(s.icono)}</span>${esc(s.titulo)}</h2>${s.html}</section>`).join("")}
-    <footer>© ${new Date().getFullYear()} ${esc(nombreCompleto)} · ${esc(DATOS.ubicacion)}</footer>`;
-
   /* ---- Toast ---- */
   let tt;
   function aviso(msg) { const t = $("#toast"); t.textContent = msg; t.classList.add("ver"); clearTimeout(tt); tt = setTimeout(() => t.classList.remove("ver"), 2400); }
@@ -437,7 +516,7 @@ const DATOS = {
   function vcard(fotoB64) {
     const l = [
       "BEGIN:VCARD", "VERSION:3.0",
-      "N:" + vEsc(DATOS.apellidos) + ";" + vEsc(DATOS.nombre) + ";;;",
+      "N:" + vEsc(K.apellidos) + ";" + vEsc(K.nombre) + ";;;",
       "FN:" + vEsc(nombreCompleto),
       "TITLE:" + vEsc(C.cargoVCard),
       "ORG:" + vEsc(C.empresaVCard),
@@ -445,7 +524,7 @@ const DATOS = {
       "EMAIL;TYPE=INTERNET,PREF:" + C.email,
       "URL;TYPE=LinkedIn:" + C.linkedin,
       "X-SOCIALPROFILE;TYPE=linkedin:" + C.linkedin,
-      "ADR;TYPE=WORK:;;;" + vEsc(DATOS.ubicacion.split(",")[0].trim()) + ";;;" + vEsc((DATOS.ubicacion.split(",")[1] || "").trim()),
+      "ADR;TYPE=WORK:;;;" + vEsc(D.ubicacion.split(",")[0].trim()) + ";;;" + vEsc((D.ubicacion.split(",")[1] || "").trim()),
       "NOTE:" + vEsc(C.cargoVCard)
     ];
     if (fotoB64) l.push("PHOTO;ENCODING=b;TYPE=JPEG:" + fotoB64);
@@ -454,13 +533,16 @@ const DATOS = {
     const plegar = s => { if (s.length <= 75) return s; const p = [s.slice(0, 75)]; for (let i = 75; i < s.length; i += 74) p.push(" " + s.slice(i, i + 74)); return p.join("\r\n"); };
     return l.map(plegar).join("\r\n") + "\r\n";
   }
-  /* ---- Ventanas de Guardar contacto y Compartir (funcionan en Android y iPhone) ---- */
+
+  /* ---- Datos de plataforma y enlaces (no dependen del idioma) ---- */
   const ua = navigator.userAgent;
   const esAndroid = /Android/i.test(ua);
   const esIOS = /iPhone|iPad|iPod/i.test(ua) || (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
   const urlBase = location.protocol.startsWith("http") ? location.origin + location.pathname.replace(/[^/]*$/, "") : "";
   const enlace = urlBase || location.href;
   const urlVcf = (urlBase || "") + "contacto.vcf";
+
+  /* ---- Ventana (hoja) de Compartir: elementos fijos, se enlazan una sola vez ---- */
   const fondo = $("#hojaFondo");
   function abrirHoja(titulo, nota, html) {
     $("#hojaTit").textContent = titulo; $("#hojaNota").textContent = nota; $("#hojaCuerpo").innerHTML = html;
@@ -474,110 +556,263 @@ const DATOS = {
     const ta = document.createElement("textarea"); ta.value = txt; ta.setAttribute("readonly", ""); ta.style.position = "fixed"; ta.style.opacity = "0";
     document.body.appendChild(ta); ta.select(); ta.setSelectionRange(0, txt.length); let ok = false; try { ok = document.execCommand("copy"); } catch (_) {} ta.remove(); return ok;
   }
-  const op = (acc, titulo, sub, extra = "") => `<button class="op ${extra}" type="button" data-acc="${acc}"><span>${titulo}${sub ? `<small>${sub}</small>` : ""}</span></button>`;
-
-  const btnG = $("#guardar");
-  btnG.removeAttribute("download");
-  // Guardar contacto:
-  //  - iPhone: abre contacto.vcf y Safari muestra la tarjeta con «Crear contacto nuevo».
-  //  - Android (Chrome): intenta abrir «Nuevo contacto» con los datos ya puestos;
-  //    si el teléfono no lo permite, descarga contacto.vcf como respaldo.
-  btnG.href = urlVcf;
-  btnG.addEventListener("click", ev => {
-    if (!esAndroid || !urlBase) return;
-    ev.preventDefault();
-    const x = v => encodeURIComponent(v);
-    location.href = "intent:#Intent;action=android.intent.action.INSERT;type=vnd.android.cursor.dir/raw_contact" +
-      ";S.name=" + x(nombreCompleto) + ";S.phone=" + x(C.telefono.replace(/\s+/g, "")) + ";i.phone_type=2" +
-      ";S.email=" + x(C.email) + ";i.email_type=2" + ";S.company=" + x(C.empresaVCard) + ";S.job_title=" + x(C.cargoVCard) +
-      ";S.notes=" + x(enlace) + ";S.browser_fallback_url=" + x(urlVcf) + ";end";
-  });
-
-  $("#compartir").addEventListener("click", () => {
-    abrirHoja("Compartir mi página", enlace,
-      op("wa", "Enviar por WhatsApp", "", "primaria") + op("copiar", "Copiar enlace") + op("qr", "Mostrar código QR", "Para que lo escaneen con la cámara") +
-      (navigator.share ? op("sistema", "Más opciones…", "Menú de compartir del teléfono") : ""));
-  });
-
+  const op = (acc, titulo, sub, extra = "") => `<button class="op ${extra}" type="button" data-acc="${acc}"><span>${esc(titulo)}${sub ? `<small>${esc(sub)}</small>` : ""}</span></button>`;
+  function hojaCompartir() {
+    abrirHoja(T.hojaTitulo, enlace,
+      op("wa", T.enviarWA, "", "primaria") + op("copiar", T.copiarEnlace) + op("qr", T.mostrarQR, T.mostrarQRSub) +
+      (navigator.share ? op("sistema", T.masOpciones, T.masOpcionesSub) : ""));
+  }
   $("#hojaCuerpo").addEventListener("click", async e => {
     const b = e.target.closest("[data-acc]"); if (!b) return;
     const acc = b.dataset.acc;
-    if (acc === "tel")  { aviso(await copiar(C.telefono) ? "Teléfono copiado ✓" : C.telefono); }
-    if (acc === "mail") { aviso(await copiar(C.email) ? "Correo copiado ✓" : C.email); }
-    if (acc === "copiar") { aviso(await copiar(enlace) ? "Enlace copiado ✓" : enlace); }
-    if (acc === "wa") { window.open("https://wa.me/?text=" + encodeURIComponent(nombreCompleto + " — " + C.cargoVCard + "\n" + enlace), "_blank", "noopener"); }
-    if (acc === "qr") { $("#hojaCuerpo").innerHTML = `<img class="qr" src="qr-pagina.svg" alt="Código QR de mi página" width="220" height="220">`; $("#hojaNota").textContent = "Escanéalo con la cámara del celular"; }
-    if (acc === "sistema") { try { await navigator.share({ title: nombreCompleto, text: nombreCompleto + " — " + C.cargoVCard, url: enlace }); } catch (err) {} }
+    if (acc === "tel")  { aviso(await copiar(C.telefono) ? T.telCopiado : C.telefono); }
+    if (acc === "mail") { aviso(await copiar(C.email) ? T.correoCopiado : C.email); }
+    if (acc === "copiar") { aviso(await copiar(enlace) ? T.enlaceCopiado : enlace); }
+    if (acc === "wa") { window.open("https://wa.me/?text=" + encodeURIComponent(nombreCompleto + " — " + D.cargo + "\n" + enlace), "_blank", "noopener"); }
+    if (acc === "qr") { $("#hojaCuerpo").innerHTML = `<img class="qr" src="qr-pagina.svg" alt="${esc(T.qrAlt)}" width="220" height="220">`; $("#hojaNota").textContent = T.qrNota; }
+    if (acc === "sistema") { try { await navigator.share({ title: nombreCompleto, text: nombreCompleto + " — " + D.cargo, url: enlace }); } catch (err) {} }
   });
 
   /* ---- Tema claro / oscuro (recuerda la elección) ---- */
-  const btnT = $("#tema"), root = document.documentElement;
-  function aplicarTema(t) {
-    root.dataset.tema = t;
-    btnT.innerHTML = I(t === "oscuro" ? "sol" : "luna");
-    btnT.setAttribute("aria-label", t === "oscuro" ? "Cambiar a modo claro" : "Cambiar a modo oscuro");
-  }
   let temaGuardado = null; try { temaGuardado = localStorage.getItem("tema"); } catch (e) {}
-  aplicarTema(temaGuardado || (matchMedia("(prefers-color-scheme: dark)").matches ? "oscuro" : "claro"));
-  btnT.addEventListener("click", () => { const t = root.dataset.tema === "oscuro" ? "claro" : "oscuro"; aplicarTema(t); try { localStorage.setItem("tema", t); } catch (e) {} });
-
-  /* ---- Timeline expandible ---- */
-  $$(".t-item").forEach(b => b.addEventListener("click", () => b.setAttribute("aria-expanded", b.getAttribute("aria-expanded") !== "true")));
-
-  /* ---- Filtros de logros ---- */
-  $$(".filtro").forEach(b => b.addEventListener("click", () => {
-    $$(".filtro").forEach(x => x.setAttribute("aria-pressed", x === b));
-    $$(".logros li").forEach(li => li.hidden = !(b.dataset.f === "todos" || li.dataset.tipo === b.dataset.f));
-  }));
-
-  /* ---- Tabs de habilidades ---- */
-  const tabs = $$(".tab");
-  function activarTab(tab) {
-    tabs.forEach(t => {
-      const on = t === tab; t.setAttribute("aria-selected", on); t.tabIndex = on ? 0 : -1;
-      const p = document.getElementById(t.getAttribute("aria-controls")); p.hidden = !on;
-      if (on) { p.classList.remove("ver"); void p.offsetWidth; p.classList.add("ver"); }
-    });
+  root.dataset.tema = temaGuardado || (matchMedia("(prefers-color-scheme: dark)").matches ? "oscuro" : "claro");
+  function pintarTema() {
+    const btnT = $("#tema"), t = root.dataset.tema;
+    btnT.innerHTML = I(t === "oscuro" ? "sol" : "luna");
+    btnT.setAttribute("aria-label", t === "oscuro" ? T.temaClaro : T.temaOscuro);
   }
-  tabs.forEach((t, i) => {
-    t.addEventListener("click", () => activarTab(t));
-    t.addEventListener("keydown", e => { if (e.key === "ArrowRight" || e.key === "ArrowLeft") { const n = tabs[(i + (e.key === "ArrowRight" ? 1 : tabs.length - 1)) % tabs.length]; activarTab(n); n.focus(); } });
-  });
 
   /* ---- Contadores animados ---- */
-  function contar(el) {
+  function contar(el, inmediato) {
     const meta = +el.dataset.meta;
-    if (reducido) { el.textContent = meta; return; }
+    if (reducido || inmediato) { el.textContent = meta; return; }
     const t0 = performance.now(), dur = 1200;
     (function paso(t) { const k = Math.min(1, (t - t0) / dur); el.textContent = Math.round(meta * (1 - Math.pow(1 - k, 3))); if (k < 1) requestAnimationFrame(paso); })(t0);
   }
-
-  /* ---- Animaciones al hacer scroll (IntersectionObserver) ---- */
-  function activar(sec) {
+  const vistas = new Set();   // secciones ya mostradas (para no repetir animaciones al cambiar de idioma)
+  function activar(sec, inmediato) {
+    vistas.add(sec.id);
     sec.classList.add("ver");
-    $$(".n[data-meta]", sec).forEach(contar);
+    $$(".n[data-meta]", sec).forEach(el => contar(el, inmediato));
     $$(".anillo", sec).forEach(a => a.style.setProperty("--p", a.dataset.p));
     $$(".anim-chips:not([hidden])", sec).forEach(c => c.classList.add("ver"));
   }
-  if ("IntersectionObserver" in window && !reducido) {
-    const io = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { activar(e.target); io.unobserve(e.target); } }), { threshold: 0.15 });
-    $$(".revelar").forEach(s => io.observe(s));
-  } else { $$(".revelar").forEach(activar); }
+  let io = null, spy = null;
 
-  /* ---- Scroll-spy: resalta la pestaña de la sección visible ---- */
-  const links = $$(".nav a");
-  if ("IntersectionObserver" in window) {
-    const spy = new IntersectionObserver(es => es.forEach(e => {
-      if (!e.isIntersecting) return;
-      links.forEach(a => {
-        const on = a.getAttribute("href") === "#" + e.target.id;
-        a.classList.toggle("activo", on);
-        if (on) { a.setAttribute("aria-current", "true"); const ul = a.closest("ul"); ul.scrollTo({ left: a.parentElement.offsetLeft - 16, behavior: reducido ? "auto" : "smooth" }); }
-        else a.removeAttribute("aria-current");
-      });
-    }), { rootMargin: "-45% 0px -50% 0px" });
-    $$("main section").forEach(s => spy.observe(s));
+  /* =================== RENDER (se repite al cambiar idioma) =================== */
+  function render(estado) {
+    D = DATOS[lang]; T = D.ui;
+    root.lang = lang;
+    document.title = D.tituloPagina;
+    const md = $('meta[name="description"]'); if (md) md.setAttribute("content", D.descripcionPagina);
+    $("#hojaCerrar").textContent = T.cerrar;
+
+    /* ---- HERO ---- */
+    $("#inicio").innerHTML = `
+    <div class="topbar">
+      <span class="chip-nfc">${I("nfc")} ${esc(T.tarjeta)}</span>
+      <div class="top-der">
+        <div class="lang" role="group" aria-label="${esc(T.idiomaGrupo)} / Language">
+          <button type="button" data-lang="es" lang="es" aria-pressed="${lang === "es"}" aria-label="Español">ES</button>
+          <button type="button" data-lang="en" lang="en" aria-pressed="${lang === "en"}" aria-label="English">EN</button>
+        </div>
+        <button class="tema" id="tema" type="button"></button>
+      </div>
+    </div>
+    <div class="avatar"><span class="ring"></span><span class="foto"><img src="${esc(K.foto)}" alt="${esc(T.fotoDe)} ${esc(nombreCompleto)}" width="132" height="132" fetchpriority="high"></span></div>
+    <h1>${esc(K.nombre)} <span>${esc(K.apellidos)}</span></h1>
+    <div class="roles">${D.roles.map(r => `<a href="${esc(r.url)}" target="_blank" rel="noopener">${esc(r.texto)}</a>`).join("")}</div>
+    <div class="sub">${esc(D.subtitulo)}</div>
+    <div class="loc">${I("pin")} ${esc(D.ubicacion)}</div>
+    <div class="acciones">
+      <a class="btn-guardar" id="guardar" href="contacto.vcf" download="${esc(nombreCompleto.replace(/\s+/g, "-"))}.vcf">${I("guardar")} ${esc(T.guardar)}</a>
+      <a class="accion" href="${esc(C.whatsapp)}" target="_blank" rel="noopener">${I("whatsapp")}WhatsApp</a>
+      <a class="accion" href="mailto:${esc(C.email)}">${I("correo")}${esc(T.correo)}</a>
+      <a class="accion" href="${esc(C.linkedin)}" target="_blank" rel="noopener">${I("linkedin")}LinkedIn</a>
+      <button class="accion" id="compartir" type="button">${I("compartir")}${esc(T.compartir)}</button>
+    </div>`;
+
+    /* ---- Contenido ---- */
+    const unos = D.logros.filter(l => l.puesto === 1).length;
+    const podios = D.logros.filter(l => l.puesto).length;
+    const lugar = n => n === 1 ? T.lugar1 : n === 3 ? T.lugar3 : T.lugarN(n);
+    const secciones = [
+      { id: "sobre-mi", titulo: T.secSobreMi, icono: "usuario", html: `
+        <p class="bio">${D.bio}</p>
+        <div class="datos-rapidos">${D.datosRapidos.map(d => `<div class="dato"><b>${esc(d.titulo)}</b><span>${esc(d.valor)}</span></div>`).join("")}</div>` },
+      { id: "estudios", titulo: T.secEstudios, icono: "birrete", html: `
+        <p class="muted" style="font-size:14px;margin-bottom:12px">${esc(T.tocaEtapa)}</p>
+        <ol class="timeline">${D.estudios.map((e, i) => `
+          <li class="${e.actual ? "actual" : ""}">
+            <button class="t-item" type="button" aria-expanded="${i === 0}" aria-controls="est-${i}">
+              <span class="t-top"><h3>${esc(e.titulo)}</h3><span class="badge ${e.actual ? "hoy" : ""}">${esc(e.periodo)}</span></span>
+              <span class="inst" style="display:block">${esc(e.institucion)}</span>
+              <span class="t-extra" id="est-${i}"><div>${esc(e.detalle)}</div></span>
+              <span class="mas">${I("flecha")} <span>${esc(T.detalles)}</span></span>
+            </button>
+          </li>`).join("")}</ol>` },
+      { id: "startups", titulo: T.secStartups, icono: "cohete", html: `
+        <div class="startups">${D.startups.map(s => `
+          <article class="startup" style="background:${s.color}">
+            <span class="logo">${I(s.icono)}</span>
+            <div class="rol">${esc(s.rol)}</div>
+            <h3>${esc(s.nombre)}</h3>
+            <p>${esc(s.descripcion)}</p>
+            ${s.url ? `<a href="${esc(s.url)}" target="_blank" rel="noopener">${I("linkedin")} ${esc(T.verLinkedIn)}</a>` : ""}
+          </article>`).join("")}</div>` },
+      { id: "logros", titulo: T.secLogros, icono: "trofeo", html: `
+        <div class="contadores">
+          <div class="contador"><div class="n" data-meta="${unos}">0</div><div class="l">${esc(T.primeros)}</div></div>
+          <div class="contador"><div class="n" data-meta="${podios}">0</div><div class="l">${esc(T.podios)}</div></div>
+          <div class="contador"><div class="n" data-meta="${D.logros.length}">0</div><div class="l">${esc(T.reconocimientos)}</div></div>
+        </div>
+        <div class="filtros" role="group" aria-label="${esc(T.filtrarLogros)}">
+          <button class="filtro" type="button" data-f="todos" aria-pressed="true">${esc(T.todos)}</button>
+          <button class="filtro" type="button" data-f="podio" aria-pressed="false">${esc(T.fPodios)}</button>
+          <button class="filtro" type="button" data-f="distincion" aria-pressed="false">${esc(T.fDistinciones)}</button>
+        </div>
+        <ul class="logros">${D.logros.map(l => `
+          <li data-tipo="${l.puesto ? "podio" : "distincion"}">
+            <span class="medalla ${l.puesto === 1 ? "m1" : l.puesto === 3 ? "m3" : "mx"}">${I(l.puesto === 1 ? "trofeo" : l.puesto ? "medalla" : "estrella")}</span>
+            <span>${l.puesto ? `<small>${esc(lugar(l.puesto))}</small>` : `<small>${esc(T.distincion)}</small>`}${esc(l.texto)}</span>
+          </li>`).join("")}</ul>` },
+      { id: "proyectos", titulo: T.secProyectos, icono: "carpeta", html: `
+        <div class="acordeon">${D.proyectos.map((p, i) => `
+          <details><summary><span class="num">${i + 1}</span>${esc(p.titulo)}<span class="flecha">${I("flecha")}</span></summary><p>${esc(p.detalle)}</p></details>`).join("")}</div>` },
+      { id: "habilidades", titulo: T.secHabilidades, icono: "rayo", html: `
+        <div class="tabs" role="tablist" aria-label="${esc(T.tipoHabilidad)}">
+          <button class="tab" role="tab" id="tab-b" aria-selected="true" aria-controls="panel-b">${esc(T.blandas)}</button>
+          <button class="tab" role="tab" id="tab-t" aria-selected="false" aria-controls="panel-t" tabindex="-1">${esc(T.tecnicas)}</button>
+        </div>
+        <div class="chips anim-chips" role="tabpanel" id="panel-t" aria-labelledby="tab-t" hidden>${D.habilidades.tecnicas.map((h, i) => `<span style="--i:${i}">${I("check")}${esc(h)}</span>`).join("")}</div>
+        <div class="chips anim-chips" role="tabpanel" id="panel-b" aria-labelledby="tab-b">${D.habilidades.blandas.map((h, i) => `<span style="--i:${i}">${I("check")}${esc(h)}</span>`).join("")}</div>` },
+      { id: "idiomas", titulo: T.secIdiomas, icono: "globo", html: `
+        <div class="idiomas">${D.idiomas.map(d => `
+          <div class="idioma"><div class="anillo" data-p="${d.porcentaje}" role="img" aria-label="${esc(d.idioma)}: ${esc(d.nivel)}"><b>${d.porcentaje}%</b></div><h3>${esc(d.idioma)}</h3><span>${esc(d.nivel)}</span></div>`).join("")}</div>` },
+      { id: "contacto", titulo: T.secContacto, icono: "telefono", html: `
+        <div class="contacto">
+          <a href="${esc(C.whatsapp)}" target="_blank" rel="noopener"><span class="ic">${I("whatsapp")}</span><span><small>WhatsApp</small>${esc(C.telefono)}</span></a>
+          <a href="mailto:${esc(C.email)}"><span class="ic">${I("correo")}</span><span><small>${esc(T.correo)}</small>${esc(C.email).replace("@", "<wbr>@")}</span></a>
+          <a href="${esc(C.linkedin)}" target="_blank" rel="noopener"><span class="ic">${I("linkedin")}</span><span><small>LinkedIn</small>${esc(nombreCompleto)}</span></a>
+          <div><span class="ic">${I("pin")}</span><span><small>${esc(T.ubicacion)}</small>${esc(D.ubicacion)}</span></div>
+        </div>` }
+    ];
+
+    $("#app").innerHTML = `
+    <nav class="nav" aria-label="${esc(T.navSecciones)}"><ul>${secciones.map(s => `<li><a href="#${s.id}">${esc(s.titulo)}</a></li>`).join("")}</ul></nav>
+    ${secciones.map(s => `<section id="${s.id}" class="revelar" aria-labelledby="h-${s.id}"><h2 id="h-${s.id}"><span class="ic">${I(s.icono)}</span>${esc(s.titulo)}</h2>${s.html}</section>`).join("")}
+    <footer>© ${new Date().getFullYear()} ${esc(nombreCompleto)} · ${esc(D.ubicacion)}</footer>`;
+
+    enlazar(estado);
   }
+
+  /* ---- Eventos de los elementos que se vuelven a dibujar ---- */
+  function enlazar(estado) {
+    // Selector de idioma
+    $$(".lang button").forEach(b => b.addEventListener("click", () => cambiarIdioma(b.dataset.lang)));
+
+    // Tema
+    pintarTema();
+    $("#tema").addEventListener("click", () => { const t = root.dataset.tema === "oscuro" ? "claro" : "oscuro"; root.dataset.tema = t; pintarTema(); try { localStorage.setItem("tema", t); } catch (e) {} });
+
+    // Guardar contacto:
+    //  - iPhone: abre contacto.vcf y Safari muestra la tarjeta con «Crear contacto nuevo».
+    //  - Android (Chrome): intenta abrir «Nuevo contacto» con los datos ya puestos;
+    //    si el teléfono no lo permite, descarga contacto.vcf como respaldo.
+    const btnG = $("#guardar");
+    btnG.removeAttribute("download");
+    btnG.href = urlVcf;
+    btnG.addEventListener("click", ev => {
+      if (!esAndroid || !urlBase) return;
+      ev.preventDefault();
+      const x = v => encodeURIComponent(v);
+      location.href = "intent:#Intent;action=android.intent.action.INSERT;type=vnd.android.cursor.dir/raw_contact" +
+        ";S.name=" + x(nombreCompleto) + ";S.phone=" + x(C.telefono.replace(/\s+/g, "")) + ";i.phone_type=2" +
+        ";S.email=" + x(C.email) + ";i.email_type=2" + ";S.company=" + x(C.empresaVCard) + ";S.job_title=" + x(C.cargoVCard) +
+        ";S.notes=" + x(enlace) + ";S.browser_fallback_url=" + x(urlVcf) + ";end";
+    });
+
+    // Compartir
+    $("#compartir").addEventListener("click", hojaCompartir);
+
+    // Timeline expandible
+    $$(".t-item").forEach(b => b.addEventListener("click", () => b.setAttribute("aria-expanded", b.getAttribute("aria-expanded") !== "true")));
+
+    // Filtros de logros
+    function filtrar(b) {
+      $$(".filtro").forEach(x => x.setAttribute("aria-pressed", x === b));
+      $$(".logros li").forEach(li => li.hidden = !(b.dataset.f === "todos" || li.dataset.tipo === b.dataset.f));
+    }
+    $$(".filtro").forEach(b => b.addEventListener("click", () => filtrar(b)));
+
+    // Tabs de habilidades
+    const tabs = $$(".tab");
+    function activarTab(tab) {
+      tabs.forEach(t => {
+        const on = t === tab; t.setAttribute("aria-selected", on); t.tabIndex = on ? 0 : -1;
+        const p = document.getElementById(t.getAttribute("aria-controls")); p.hidden = !on;
+        if (on) { p.classList.remove("ver"); void p.offsetWidth; p.classList.add("ver"); }
+      });
+    }
+    tabs.forEach((t, i) => {
+      t.addEventListener("click", () => activarTab(t));
+      t.addEventListener("keydown", e => { if (e.key === "ArrowRight" || e.key === "ArrowLeft") { const n = tabs[(i + (e.key === "ArrowRight" ? 1 : tabs.length - 1)) % tabs.length]; activarTab(n); n.focus(); } });
+    });
+
+    // Restaurar el estado de la interfaz tras cambiar de idioma
+    if (estado) {
+      $$(".t-item").forEach((b, i) => b.setAttribute("aria-expanded", estado.expandidos[i] === true));
+      $$(".acordeon details").forEach((d, i) => { d.open = !!estado.abiertos[i]; });
+      const f = $(`.filtro[data-f="${estado.filtro}"]`); if (f) filtrar(f);
+      const t = document.getElementById(estado.tab); if (t && t !== tabs[0]) { tabs.forEach(x => { const on = x === t; x.setAttribute("aria-selected", on); x.tabIndex = on ? 0 : -1; document.getElementById(x.getAttribute("aria-controls")).hidden = !on; }); }
+    }
+
+    // Animaciones al hacer scroll (IntersectionObserver); lo ya visto aparece al instante
+    if (io) io.disconnect();
+    $$(".revelar").forEach(s => { if (vistas.has(s.id)) activar(s, true); });
+    if ("IntersectionObserver" in window && !reducido) {
+      io = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { activar(e.target); io.unobserve(e.target); } }), { threshold: 0.15 });
+      $$(".revelar").forEach(s => { if (!vistas.has(s.id)) io.observe(s); });
+    } else { $$(".revelar").forEach(s => activar(s, true)); }
+
+    // Scroll-spy: resalta la pestaña de la sección visible
+    if (spy) spy.disconnect();
+    const links = $$(".nav a");
+    if ("IntersectionObserver" in window) {
+      spy = new IntersectionObserver(es => es.forEach(e => {
+        if (!e.isIntersecting) return;
+        links.forEach(a => {
+          const on = a.getAttribute("href") === "#" + e.target.id;
+          a.classList.toggle("activo", on);
+          if (on) { a.setAttribute("aria-current", "true"); const ul = a.closest("ul"); ul.scrollTo({ left: a.parentElement.offsetLeft - 16, behavior: reducido ? "auto" : "smooth" }); }
+          else a.removeAttribute("aria-current");
+        });
+      }), { rootMargin: "-45% 0px -50% 0px" });
+      $$("main section").forEach(s => spy.observe(s));
+    }
+  }
+
+  /* ---- Cambio de idioma instantáneo (sin recargar) ---- */
+  function cambiarIdioma(nuevo) {
+    if (!IDIOMAS.includes(nuevo) || nuevo === lang) return;
+    const estado = {
+      expandidos: $$(".t-item").map(b => b.getAttribute("aria-expanded") === "true"),
+      abiertos: $$(".acordeon details").map(d => d.open),
+      filtro: ($('.filtro[aria-pressed="true"]') || {}).dataset?.f || "todos",
+      tab: ($('.tab[aria-selected="true"]') || {}).id || "tab-b"
+    };
+    const y = scrollY;
+    lang = nuevo;
+    try { localStorage.setItem("idioma", lang); } catch (e) {}
+    try { const u = new URL(location.href); if (u.searchParams.has("lang")) { u.searchParams.set("lang", lang); history.replaceState(null, "", u); } } catch (e) {}
+    const hojaAbierta = fondo.classList.contains("ver");
+    if (hojaAbierta) cerrarHoja();
+    render(estado);
+    scrollTo(0, y);
+    const b = $(`.lang button[data-lang="${lang}"]`); if (b) b.focus({ preventScroll: true });
+  }
+
+  render(null);
 })();
 </script>
 </body>
