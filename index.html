@@ -7,6 +7,7 @@
 <meta name="description" content="Founder de JADAI y CEO de AgroTrace. Estudiante de Innovación Digital e Inteligencia Artificial (UNICEN) y Ciencias de la Educación (UAGRM). Santa Cruz, Bolivia.">
 <meta name="theme-color" content="#0f1b2d">
 <meta name="nfc-i18n" content="es,en-v1">
+<meta name="nfc-agenda" content="v1">
 <meta property="og:title" content="Miguel Angel Vega Moreno">
 <meta property="og:description" content="Founder de JADAI · CEO de AgroTrace">
 <meta property="og:image" content="foto.jpg">
@@ -63,6 +64,11 @@ svg{width:1em;height:1em;fill:none;stroke:currentColor;stroke-width:2;stroke-lin
 .accion svg{font-size:24px}
 .accion:hover{background:rgba(255,255,255,.18)}
 .accion:active,.btn-guardar:active{transform:scale(.95)}
+/* Programar reunión (agenda) */
+.btn-agenda{background:linear-gradient(135deg,#3b82f6,#1d4ed8);color:#fff;border:1px solid rgba(255,255,255,.22)}
+.btn-agenda svg{color:#fff}
+.agenda-card p{color:var(--muted);margin-bottom:14px}
+.agenda-card .btn-guardar{min-height:52px}
 
 /* ---------- NAV (tabs pegajosas) ---------- */
 .nav{position:sticky;top:0;z-index:20;background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);margin:0 -16px;padding:12px 16px 10px}
@@ -244,7 +250,8 @@ const DATOS = {
       linkedin: "https://www.linkedin.com/in/miguel-angel-vega-moreno-1715a5277",
       cargoVCard: "Founder de JADAI · CEO de AgroTrace",   // usado por «Guardar contacto» (Android)
       empresaVCard: "JADAI · AgroTrace"
-    }
+    },
+    agenda: "https://cal.com/miguelangelvega/reunion"   // enlace para «Programar reunión» / «Book a meeting»
   },
 
   /* =============================== ESPAÑOL =============================== */
@@ -345,7 +352,10 @@ const DATOS = {
       mostrarQR: "Mostrar código QR", mostrarQRSub: "Para que lo escaneen con la cámara",
       masOpciones: "Más opciones…", masOpcionesSub: "Menú de compartir del teléfono",
       qrAlt: "Código QR de mi página", qrNota: "Escanéalo con la cámara del celular",
-      telCopiado: "Teléfono copiado ✓", correoCopiado: "Correo copiado ✓", enlaceCopiado: "Enlace copiado ✓"
+      telCopiado: "Teléfono copiado ✓", correoCopiado: "Correo copiado ✓", enlaceCopiado: "Enlace copiado ✓",
+      agendar: "Programar reunión", secAgenda: "Agenda una reunión", navAgenda: "Reunión",
+      agendaDesc: "Elige 15, 30, 45 o 60 minutos y un horario libre. Recibirás la invitación con enlace de Google Meet en tu correo.",
+      nuevaPestana: "se abre en una pestaña nueva"
     }
   },
 
@@ -447,7 +457,10 @@ const DATOS = {
       mostrarQR: "Show QR code", mostrarQRSub: "So others can scan it with their camera",
       masOpciones: "More options…", masOpcionesSub: "Your phone's share menu",
       qrAlt: "QR code for my page", qrNota: "Scan it with your phone's camera",
-      telCopiado: "Phone number copied ✓", correoCopiado: "Email copied ✓", enlaceCopiado: "Link copied ✓"
+      telCopiado: "Phone number copied ✓", correoCopiado: "Email copied ✓", enlaceCopiado: "Link copied ✓",
+      agendar: "Book a meeting", secAgenda: "Schedule a meeting", navAgenda: "Meeting",
+      agendaDesc: "Pick 15, 30, 45 or 60 minutes and an open time slot. You'll get a Google Meet invite by email.",
+      nuevaPestana: "opens in a new tab"
     }
   }
 };
@@ -503,8 +516,10 @@ const DATOS = {
     nfc: '<path d="M6 8.3a6 6 0 0 1 0 7.4M9.5 5.5a10 10 0 0 1 0 13M13 3a14 14 0 0 1 0 18"/>',
     cerebro: '<path d="M12 5a3 3 0 1 0-5.997.125 4 4 0 0 0-2.526 5.77 4 4 0 0 0 .556 6.588A4 4 0 1 0 12 18Z"/><path d="M12 5a3 3 0 1 1 5.997.125 4 4 0 0 1 2.526 5.77 4 4 0 0 1-.556 6.588A4 4 0 1 1 12 18Z"/><path d="M12 5v13"/>',
     corazon: '<path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/>',
+    calendario: '<rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18M8 14h.01M12 14h.01M16 14h.01M8 18h.01M12 18h.01"/>',
     hoja: '<path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.5 19 2c1 2 2 4.2 2 8 0 5.5-4.8 10-10 10Z"/><path d="M2 21c0-3 1.9-5.4 5.2-6"/>'
   };
+  const btnAgenda = () => `<a class="btn-guardar btn-agenda" href="${esc(K.agenda)}" target="_blank" rel="noopener" aria-label="${esc(T.agendar)} (${esc(T.nuevaPestana)})">${I("calendario")} ${esc(T.agendar)}</a>`;
   const I = n => '<svg viewBox="0 0 24 24" aria-hidden="true">' + (P[n] || "") + "</svg>";
 
   /* ---- Toast ---- */
@@ -626,6 +641,7 @@ const DATOS = {
     <div class="loc">${I("pin")} ${esc(D.ubicacion)}</div>
     <div class="acciones">
       <a class="btn-guardar" id="guardar" href="contacto.vcf" download="${esc(nombreCompleto.replace(/\s+/g, "-"))}.vcf">${I("guardar")} ${esc(T.guardar)}</a>
+      ${btnAgenda()}
       <a class="accion" href="${esc(C.whatsapp)}" target="_blank" rel="noopener">${I("whatsapp")}WhatsApp</a>
       <a class="accion" href="mailto:${esc(C.email)}">${I("correo")}${esc(T.correo)}</a>
       <a class="accion" href="${esc(C.linkedin)}" target="_blank" rel="noopener">${I("linkedin")}LinkedIn</a>
@@ -689,6 +705,11 @@ const DATOS = {
       { id: "idiomas", titulo: T.secIdiomas, icono: "globo", html: `
         <div class="idiomas">${D.idiomas.map(d => `
           <div class="idioma"><div class="anillo" data-p="${d.porcentaje}" role="img" aria-label="${esc(d.idioma)}: ${esc(d.nivel)}"><b>${d.porcentaje}%</b></div><h3>${esc(d.idioma)}</h3><span>${esc(d.nivel)}</span></div>`).join("")}</div>` },
+      { id: "agenda", titulo: T.secAgenda, nav: T.navAgenda, icono: "calendario", html: `
+        <div class="agenda-card">
+          <p>${esc(T.agendaDesc)}</p>
+          ${btnAgenda()}
+        </div>` },
       { id: "contacto", titulo: T.secContacto, icono: "telefono", html: `
         <div class="contacto">
           <a href="${esc(C.whatsapp)}" target="_blank" rel="noopener"><span class="ic">${I("whatsapp")}</span><span><small>WhatsApp</small>${esc(C.telefono)}</span></a>
@@ -699,7 +720,7 @@ const DATOS = {
     ];
 
     $("#app").innerHTML = `
-    <nav class="nav" aria-label="${esc(T.navSecciones)}"><ul>${secciones.map(s => `<li><a href="#${s.id}">${esc(s.titulo)}</a></li>`).join("")}</ul></nav>
+    <nav class="nav" aria-label="${esc(T.navSecciones)}"><ul>${secciones.map(s => `<li><a href="#${s.id}">${esc(s.nav || s.titulo)}</a></li>`).join("")}</ul></nav>
     ${secciones.map(s => `<section id="${s.id}" class="revelar" aria-labelledby="h-${s.id}"><h2 id="h-${s.id}"><span class="ic">${I(s.icono)}</span>${esc(s.titulo)}</h2>${s.html}</section>`).join("")}
     <footer>© ${new Date().getFullYear()} ${esc(nombreCompleto)} · ${esc(D.ubicacion)}</footer>`;
 
