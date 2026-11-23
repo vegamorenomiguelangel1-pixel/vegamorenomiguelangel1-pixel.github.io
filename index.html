@@ -311,6 +311,7 @@ const DATOS = {
 
     // --- Proyectos ---
     proyectos: [
+      { titulo: "Minimarket POS (UNICEN)",               detalle: "Sistema de ventas e inventario en Python y Flet: login por roles, productos, clientes, caja y reportes.", url: "/minimarket/" },
       { titulo: "EkoLearn (Founder)",                    detalle: "Sistema de apoyo para la detección temprana de indicadores de bienestar emocional mediante inteligencia artificial y análisis de actividad digital." },
       { titulo: "Proyecto de Vinculación Universitaria", detalle: "Conexión entre la universidad y la comunidad a través de proyectos aplicados." },
       { titulo: "Comunidad JADAI",                       detalle: "Espacio abierto donde profesionales y estudiantes colaboran en investigación, hackathons y nuevas startups con IA." },
@@ -355,7 +356,8 @@ const DATOS = {
       telCopiado: "Teléfono copiado ✓", correoCopiado: "Correo copiado ✓", enlaceCopiado: "Enlace copiado ✓",
       agendar: "Programar reunión", secAgenda: "Agenda una reunión", navAgenda: "Reunión",
       agendaDesc: "Elige 15, 30, 45 o 60 minutos y un horario libre. Recibirás la invitación con enlace de Google Meet en tu correo.",
-      nuevaPestana: "se abre en una pestaña nueva"
+      nuevaPestana: "se abre en una pestaña nueva",
+      abrirDemo: "Abrir demo"
     }
   },
 
@@ -416,6 +418,7 @@ const DATOS = {
 
     // --- Projects ---
     proyectos: [
+      { titulo: "Minimarket POS (UNICEN)",           detalle: "Point-of-sale and inventory system in Python and Flet: role-based login, products, customers, checkout and reports.", url: "/minimarket/" },
       { titulo: "EkoLearn (Founder)",                detalle: "A support system for the early detection of emotional well-being indicators using artificial intelligence and digital activity analysis." },
       { titulo: "University Outreach Project",       detalle: "Connecting the university with the community through applied projects." },
       { titulo: "JADAI Community",                   detalle: "An open space where professionals and students collaborate on research, hackathons and new AI startups." },
@@ -460,7 +463,8 @@ const DATOS = {
       telCopiado: "Phone number copied ✓", correoCopiado: "Email copied ✓", enlaceCopiado: "Link copied ✓",
       agendar: "Book a meeting", secAgenda: "Schedule a meeting", navAgenda: "Meeting",
       agendaDesc: "Pick 15, 30, 45 or 60 minutes and an open time slot. You'll get a Google Meet invite by email.",
-      nuevaPestana: "opens in a new tab"
+      nuevaPestana: "opens in a new tab",
+      abrirDemo: "Open demo"
     }
   }
 };
@@ -694,7 +698,7 @@ const DATOS = {
           </li>`).join("")}</ul>` },
       { id: "proyectos", titulo: T.secProyectos, icono: "carpeta", html: `
         <div class="acordeon">${D.proyectos.map((p, i) => `
-          <details><summary><span class="num">${i + 1}</span>${esc(p.titulo)}<span class="flecha">${I("flecha")}</span></summary><p>${esc(p.detalle)}</p></details>`).join("")}</div>` },
+          <details><summary><span class="num">${i + 1}</span>${esc(p.titulo)}<span class="flecha">${I("flecha")}</span></summary><p>${esc(p.detalle)}</p>${p.url ? `<p><a href="${esc(p.url)}">${esc(T.abrirDemo)}</a></p>` : ""}</details>`).join("")}</div>` },
       { id: "habilidades", titulo: T.secHabilidades, icono: "rayo", html: `
         <div class="tabs" role="tablist" aria-label="${esc(T.tipoHabilidad)}">
           <button class="tab" role="tab" id="tab-b" aria-selected="true" aria-controls="panel-b">${esc(T.blandas)}</button>
